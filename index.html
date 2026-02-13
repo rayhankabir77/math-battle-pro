@@ -1,30 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Math Battle Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Battle Pro</title>
     <style>
-        body { text-align: center; font-family: Arial; background: #121212; color: white; }
-        .box { border: 2px solid #00ff00; padding: 20px; margin: 50px auto; width: 300px; }
-        button { background: #00ff00; border: none; padding: 10px 20px; cursor: pointer; }
+        body { text-align: center; font-family: Arial; background: #121212; color: white; margin-top: 50px; }
+        .box { border: 2px solid #00ff00; padding: 20px; margin: 0 auto; width: 80%; max-width: 400px; border-radius: 10px; }
+        input { padding: 10px; width: 60%; margin-bottom: 10px; border-radius: 5px; border: none; }
+        button { background: #00ff00; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        #ad-status { margin-top: 20px; color: #888; font-size: 12px; }
     </style>
 </head>
 <body>
+
     <div class="box">
-        <h2>Solve: 15 + 27 = ?</h2>
-        <input type="number" id="ans" placeholder="Your Answer">
+        <h2>Math Battle Pro</h2>
+        <p id="question">15 + 27 = ?</p>
+        <input type="number" id="ans" placeholder="Answer here">
+        <br>
         <button onclick="check()">Submit</button>
         <p id="result"></p>
+        <p id="ad-status">Loading Ads...</p>
     </div>
 
+    <script src="https://unpkg.com/@capacitor/core@5.0.0/dist/capacitor.js"></script>
+    
     <script>
+        // ১. উত্তর চেক করার লজিক
         function check() {
             let val = document.getElementById('ans').value;
             if(val == 42) {
                 document.getElementById('result').innerText = "Correct! +10 Points";
+                document.getElementById('result').style.color = "#00ff00";
             } else {
                 document.getElementById('result').innerText = "Wrong! Try Again.";
+                document.getElementById('result').style.color = "red";
             }
         }
+
+        // ২. AdMob Test Ads লজিক
+        async function showAd() {
+            try {
+                // আমরা যেহেতু Capacitor ব্যবহার করছি, গিটহাব থেকে বিল্ডের পর এটি কাজ করবে
+                const { AdMob } = window.Capacitor.Plugins;
+                
+                await AdMob.initialize({ requestTrackingAuthorization: true });
+
+                const options = {
+                    adId: 'ca-app-pub-3940256099942544/6300978111', // গুগলের টেস্ট আইডি
+                    adSize: 'BANNER',
+                    position: 'BOTTOM_CENTER',
+                    margin: 0,
+                    isTesting: true
+                };
+
+                await AdMob.showBanner(options);
+                document.getElementById('ad-status').innerText = "Test Ad Loaded!";
+            } catch (e) {
+                console.log("Ad error: ", e);
+                document.getElementById('ad-status').innerText = "Ad failed to load.";
+            }
+        }
+
+        // অ্যাপ ওপেন হলে অ্যাড দেখাবে
+        window.onload = () => {
+            setTimeout(showAd, 2000); // ২ সেকেন্ড পর অ্যাড দেখাবে
+        };
     </script>
 </body>
 </html>
