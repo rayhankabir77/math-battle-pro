@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Battle Demo</title>
+    <style>
+        body { text-align: center; font-family: Arial; background: #121212; color: white; }
+        .box { border: 2px solid #00ff00; padding: 20px; margin: 50px auto; width: 300px; }
+        button { background: #00ff00; border: none; padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Solve: 15 + 27 = ?</h2>
+        <input type="number" id="ans" placeholder="Your Answer">
+        <button onclick="check()">Submit</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function check() {
+            let val = document.getElementById('ans').value;
+            if(val == 42) {
+                document.getElementById('result').innerText = "Correct! +10 Points";
+            } else {
+                document.getElementById('result').innerText = "Wrong! Try Again.";
+            }
+        }
+    </script>
+</body>
+</html>
