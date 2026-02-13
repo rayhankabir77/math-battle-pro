@@ -1,25 +1,42 @@
-name: Math Battle CI/CD
+name: Build Android APK
 
 on:
   push:
-    branches: [ "main" ] # যখনই আপনি কোড 'Push' করবেন তখনই এটি কাজ করবে
-  pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest # এটি গিটহাবের সার্ভারে আপনার কোড রান করবে
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4 # আপনার কোডগুলো গিটহাব অ্যাকশনে নিয়ে আসা
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Check HTML and JS
-      run: |
-        echo "Checking your Math Game code..."
-        # এখানে ভবিষ্যতে আপনার অ্যাপ বিল্ড করার কমান্ডগুলো থাকবে
-        echo "Build successful! Your code is ready for RayhanGamer.dev"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "Math Battle" "com.rayhangamer.math" --web-dir .
+          npx cap add android
+
+      - name: Build Android Project
+        run: |
+          npx cap copy
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Math-Battle-Game-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
