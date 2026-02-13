@@ -1,0 +1,6 @@
+{
+  "appId": "com.rayhangamer.math",
+  "appName": "Math Battle",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
