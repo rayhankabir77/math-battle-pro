@@ -12,41 +12,31 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Dependencies
-        run: |
-          npm install
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-
-      - name: Initialize Capacitor
-        run: |
-          npx cap init "Math Battle" "com.rayhangamer.math" --web-dir .
-          npx cap add android
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Copy Web Files to Android
-        run: npx cap copy
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Build Android APK
+      - name: Install Capacitor CLI
+        run: npm install @capacitor/cli @capacitor/core @capacitor/android
+
+      - name: Create Android Project
         run: |
+          npx cap init "Math Battle" "com.rayhangamer.math" --web-dir .
+          npx cap add android
+
+      - name: Sync and Build
+        run: |
+          npx cap copy
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Math-Battle-Game-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
