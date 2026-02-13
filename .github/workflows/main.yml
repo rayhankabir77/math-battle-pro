@@ -12,23 +12,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install Capacitor CLI
+      - name: Prepare Web Directory
+        run: |
+          mkdir www
+          cp index.html www/
+          # আপনার যদি অন্য কোনো ছবি বা ফাইল থাকে, সেগুলোও এখানে কপি করতে পারেন
+
+      - name: Install Dependencies
         run: npm install @capacitor/cli @capacitor/core @capacitor/android
 
       - name: Create Android Project
         run: |
-          npx cap init "Math Battle" "com.rayhangamer.math" --web-dir .
+          npx cap init "Math Battle" "com.rayhangamer.math" --web-dir www
           npx cap add android
 
       - name: Sync and Build
