@@ -1,7 +1,7 @@
 {
   "appId": "com.rayhangamer.math",
   "appName": "Math Battle",
-  "webDir": ".",
+  "webDir": "www",
   "server": {
     "androidScheme": "https"
   }
